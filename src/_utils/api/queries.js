@@ -17,7 +17,6 @@ export const SignAuth =  async (req, params) => {
           }else{
             return "Mauvais Mot de passe ou Nom"
           }
-
         
         })
       .catch(function (error) {

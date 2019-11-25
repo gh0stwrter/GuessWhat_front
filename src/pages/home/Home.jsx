@@ -59,7 +59,7 @@ export default function Album() {
     const sendNewRoom = (e) => {
         e.preventDefault();
         CreateRoomGame(apiVar.createRoom,{
-            Admin:apiVar.id,
+            Craetor: apiVar.id,
             Name: name,
         })
     }
