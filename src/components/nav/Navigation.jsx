@@ -11,6 +11,12 @@ const Navigation = () => {
         <Navbar expand="md" color="light" light>
             <Nav className="" navbar>
             <NavItem className="">
+                <NavLink href='/inscription'>Inscription</NavLink>
+            </NavItem>
+            <NavItem className="">
+                <NavLink href='/connection'>Connection</NavLink>
+            </NavItem>
+            <NavItem className="">
                 <NavLink href='/'>Acceuil</NavLink>
             </NavItem>
             <NavItem className="">
