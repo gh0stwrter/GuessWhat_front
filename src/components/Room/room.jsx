@@ -1,16 +1,20 @@
 import React, {useEffect, useState, useRef} from "react";
+/*import apiVar from "../../_utils/api/apiVar";*/
 import {makeStyles} from '@material-ui/core/styles';
-import Drawing from './drawingComponent'
-import Canvas from './Canvas'
-import apiVar from "../../_utils/api/apiVar";
-import {Button, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
 import {TiUser} from "react-icons/ti";
+
+/*import Drawing from './drawingComponent'*/
+/*import Canvas from './Canvas'*/
 import {socket} from "../../_utils/socket/socketManager"
+
+import {Button} from 'reactstrap';
+import {Test} from "../../components/api"
 
 const Room = (props) => {
     const classes = useStyles();
-    const canvasRef = useRef(null);
-    const [name, nameChange] = useState(localStorage.getItem('roomName'))
+    /*const canvasRef = useRef(null);*/
+    const [name] = useState(localStorage.getItem('roomName'))
+    const [adminName] = useState(localStorage.getItem('roomName'))
     const [username, uChange] = useState('')
     const [userlist, changeUserList] = useState([])
     const [isPressing, setIsPressing] = useState(false);
@@ -20,17 +24,17 @@ const Room = (props) => {
         position: []
     });
 
+    useEffect(() => {
+        /*Test()*/
+
+    })
+
 
     const getTurn = async () => {
 
     }
 
     const sendDraw = async (msg) => {
-        socket.send(JSON.stringify(msg))
-        socket.onmessage = msg => {
-            let dataSocket = JSON.parse(msg.data)
-            let parsedData = JSON.parse(dataSocket.body)
-        };
 
     }
 
@@ -47,12 +51,12 @@ const Room = (props) => {
     }
 
     const sendMessage = async (msg) => {
-        socket.send(JSON.stringify(msg))
+/*        socket.send(JSON.stringify(msg))
         socket.onmessage = msg => {
             let dataSocket = JSON.parse(msg.data)
             let parsedData = JSON.parse(dataSocket.body)
-            console.log(parsedData)
-        };
+            console.log(parsedData)*/
+       /* };*/
     }
 
     return (
@@ -95,7 +99,7 @@ const Room = (props) => {
                     </div>
 
                     <div className={classes.canvas} id={'draw'}>
-                        <Drawing/>
+                        {/*<Drawing/>*/}
                         {/*<Canvas/>*/}
                     </div>
                 </div>

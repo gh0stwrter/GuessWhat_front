@@ -1,5 +1,5 @@
 import React from "react";
-import {
+/*import {
     sendDrawInfo,
     sendFillInfo,
     subscribeToDrawing,
@@ -7,7 +7,7 @@ import {
     subscribeToTurns,
     subscribeToResetCanvas,
     subscribeToMyId
-} from "../api";
+} from "../api";*/
 
 class Canvas extends React.Component {
     constructor(props) {

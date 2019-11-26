@@ -3,8 +3,6 @@ let localToken = localStorage.getItem("token")
 let localName = localStorage.getItem("Name")
 let localId = localStorage.getItem("_id")
 let user = JSON.parse(localStorage.getItem("user"))
-console.log(user)
-
 
  const apiVar = {
         token: localToken,
