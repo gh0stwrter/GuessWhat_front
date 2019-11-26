@@ -7,7 +7,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {socket} from "../../_utils/socket/socketManager";
 
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +31,6 @@ function Drawing(props) {
     const [labelWidth, setLabelWidth] = React.useState(0);
     React.useEffect(() => {
         setLabelWidth(100);
-        console.log(socket)
     }, []);
 
     const handleChange = event => {

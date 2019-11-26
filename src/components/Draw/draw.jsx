@@ -4,7 +4,7 @@ import Drawing from './drawingComponent'
 import apiVar from "../../_utils/api/apiVar";
 import {Button, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
 import { TiUser } from "react-icons/ti";
-import {socket} from "../../_utils/socket/socketManager"
+import {WebsocketConnection} from "../../_utils/socket/socketManager"
 
 
 
@@ -24,13 +24,13 @@ const Draw = (props) => {
         reponses:[],
         position:[]
     });
-
-
+    
+console.log()
     const getTurn = async () => {
 
     }
 
-    const sendDraw = async (msg) => {
+   /* const sendDraw = async (msg) => {
         socket.send(JSON.stringify(msg))
         socket.onmessage = msg => {
                 let dataSocket = JSON.parse(msg.data)
@@ -38,7 +38,7 @@ const Draw = (props) => {
                 
             };
 
-    }
+    }*/
     
 
     const getDraw = async () => {
@@ -49,18 +49,18 @@ const Draw = (props) => {
 
     }
 
-    const getMessage = async () => {
+    const getMessage = async (messages) => {
 
     }
 
-    const sendMessage = async (msg) => {
+    /*const sendReponse = async (reponses) => {
         socket.send(JSON.stringify(msg))
         socket.onmessage = msg => {
                 let dataSocket = JSON.parse(msg.data)
                 let parsedData = JSON.parse(dataSocket.body)
                 console.log(parsedData)                
             };
-    }
+    }*/
 
     const handleMouseDown = () => {
         setIsPressing(true);
