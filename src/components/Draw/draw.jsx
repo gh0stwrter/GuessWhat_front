@@ -14,6 +14,7 @@ const COLORS = ["red", "blue", "orange", "green", "yellow", "purple"];
 const Draw = (props) => {
     const classes = useStyles();
     const canvasRef = useRef(null);
+    const [name, nameChange] = useState(localStorage.getItem('roomName'))
     const [username, uChange] = useState('')
     const [userlist, changeUserList] = useState([])
     const [isPressing, setIsPressing] = useState(false);
@@ -96,7 +97,7 @@ const Draw = (props) => {
     return (
         <div className={classes.container}>
             <div className={classes.title}>
-                <h2>Bienvenu sur le salon: Salon01</h2>
+                <h2>Bienvenu sur le salon: {name}</h2>
                 <span>c'est le tour de :</span>
             </div>
             <div className={classes.game}>

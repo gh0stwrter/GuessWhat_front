@@ -43,7 +43,6 @@ export const SignUp = async (req, params) => {
 
 
 export const CreateRoomGame = async (req, params) => {
-    console.log(params)
     await axios.post(req, params)
         .then(res => {
             console.log(res)
