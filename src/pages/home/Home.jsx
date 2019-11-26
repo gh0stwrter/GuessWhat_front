@@ -45,13 +45,9 @@ export default function Album(props) {
     
           };
       };
-    const sendNewRoom = (e) => {
+    const sendNewRoom = async (e) => {
         e.preventDefault();
-const dataUser = {
-    id: 123,
-    name: "tamere"
-}
-  sendMsg(dataUser)
+
         CreateRoomGame(apiVar.createRoom, {
             AdminID: apiVar.user.id,
             Name: name,

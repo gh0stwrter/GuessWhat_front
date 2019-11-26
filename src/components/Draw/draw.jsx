@@ -4,6 +4,7 @@ import Drawing from './drawingComponent'
 import apiVar from "../../_utils/api/apiVar";
 import {Button, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
 import { TiUser } from "react-icons/ti";
+import {socket} from "../../_utils/socket/socketManager"
 
 
 
@@ -18,15 +19,26 @@ const Draw = (props) => {
     const [isPressing, setIsPressing] = useState(false);
     const [prevLocation, setPrevLocation] = useState(null);
     const [color, setColor] = useState(COLORS[0]);
+    const [socketData, setSocketData] = useState({
+        reponses:[],
+        position:[]
+    });
 
 
     const getTurn = async () => {
 
     }
 
-    const sendDraw = async () => {
+    const sendDraw = async (msg) => {
+        socket.send(JSON.stringify(msg))
+        socket.onmessage = msg => {
+                let dataSocket = JSON.parse(msg.data)
+                let parsedData = JSON.parse(dataSocket.body)
+                
+            };
 
     }
+    
 
     const getDraw = async () => {
 
@@ -40,8 +52,13 @@ const Draw = (props) => {
 
     }
 
-    const sendMessage = async () => {
-
+    const sendMessage = async (msg) => {
+        socket.send(JSON.stringify(msg))
+        socket.onmessage = msg => {
+                let dataSocket = JSON.parse(msg.data)
+                let parsedData = JSON.parse(dataSocket.body)
+                console.log(parsedData)                
+            };
     }
 
     const handleMouseDown = () => {
@@ -76,7 +93,6 @@ const Draw = (props) => {
 
         setPrevLocation({x: e.clientX, y: e.clientY});
     }
-
     return (
         <div className={classes.container}>
             <div className={classes.title}>
@@ -111,7 +127,7 @@ const Draw = (props) => {
                             </ul>
                         </div>
                         <div className={classes.sending}>
-                            <input type="text" className={classes.sendInput}/>
+                            <input  type="text" className={classes.sendInput}/>
                             <Button >Envoyer</Button>
                         </div>
                     </div>
@@ -127,7 +143,7 @@ const Draw = (props) => {
             </div>
         </div>
     )
-}
+    }
 export default Draw;
 
 

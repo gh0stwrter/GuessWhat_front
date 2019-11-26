@@ -12,10 +12,6 @@ import Notfound from "./components/404/NotFound";
 import Draw from "./components/Draw/draw";
 
 const Routes = (props) => {
-  console.log(props)
-  console.log(socket)
-
-
   return (
     <Router history={history}>
       <Nav/>
