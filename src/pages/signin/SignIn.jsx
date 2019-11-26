@@ -5,7 +5,7 @@ import {Container} from "reactstrap"
 const SignIn = (props) => {
         return (
             <div>
-                    <FormSignIn {...props}/>
+                <FormSignIn {...props}/>
             </div>
         )
 }

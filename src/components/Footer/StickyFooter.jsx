@@ -10,7 +10,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        GuessWhat by LBZ
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
+    minHeight: '100%',
   },
   main: {
     marginTop: theme.spacing(8),
@@ -43,7 +43,7 @@ export default function StickyFooter() {
       <CssBaseline />
       <footer className={classes.footer}>
         <Container maxWidth="sm">
-          <Typography variant="body1">Guess What</Typography>
+         {/* <Typography variant="body1">Guess What</Typography>*/}
           <Copyright />
         </Container>
       </footer>

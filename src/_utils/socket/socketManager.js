@@ -14,8 +14,6 @@ export let socket = new WebSocket("ws://127.0.01:8000/ws");
             console.log("Socket Error: ", error);
         };
         
-        socket.onmessage = msg => {
-            console.log(msg);
-            
-          };
-
+        
+          
+          
