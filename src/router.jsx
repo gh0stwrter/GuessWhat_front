@@ -4,12 +4,12 @@ import history from "./_utils/history";
 import Home from "./pages/home/Home";
 import Ranking from "./pages/ranking/Ranking";
 import SignIn from "./pages/signin/SignIn";
-import Nav from "./components/Nav/Navigation"
+import Nav from "./components/nav/Navigation"
 import StickyFooter from "./components/Footer/StickyFooter";
 import {socket} from "./_utils/socket/socketManager";
 import {PrivateRoute} from "./middleware/privateRoute";
 import Notfound from "./components/404/NotFound";
-import Draw from "./components/Draw/draw";
+import Room from "./components/Room/room";
 
 const Routes = (props) => {
   return (
@@ -19,7 +19,7 @@ const Routes = (props) => {
           {/* PAGES */}
           <Switch>
           <Route exec path='/classement' component={Ranking} />
-          <PrivateRoute path='/salon/:id' component={Draw} />
+          <PrivateRoute path='/salon/:id' component={Room} />
           <Route exact path='/' component={Home} />
           {/* COMPONENTS */}
           <Route exac path='/connexion' component={SignIn} />

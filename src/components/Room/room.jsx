@@ -1,17 +1,13 @@
 import React, {useEffect, useState, useRef} from "react";
 import {makeStyles} from '@material-ui/core/styles';
 import Drawing from './drawingComponent'
+import Canvas from './Canvas'
 import apiVar from "../../_utils/api/apiVar";
 import {Button, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
-import { TiUser } from "react-icons/ti";
+import {TiUser} from "react-icons/ti";
 import {socket} from "../../_utils/socket/socketManager"
 
-
-
-const COLORS = ["red", "blue", "orange", "green", "yellow", "purple"];
-
-
-const Draw = (props) => {
+const Room = (props) => {
     const classes = useStyles();
     const canvasRef = useRef(null);
     const [name, nameChange] = useState(localStorage.getItem('roomName'))
@@ -19,10 +15,9 @@ const Draw = (props) => {
     const [userlist, changeUserList] = useState([])
     const [isPressing, setIsPressing] = useState(false);
     const [prevLocation, setPrevLocation] = useState(null);
-    const [color, setColor] = useState(COLORS[0]);
     const [socketData, setSocketData] = useState({
-        reponses:[],
-        position:[]
+        reponses: [],
+        position: []
     });
 
 
@@ -33,13 +28,11 @@ const Draw = (props) => {
     const sendDraw = async (msg) => {
         socket.send(JSON.stringify(msg))
         socket.onmessage = msg => {
-                let dataSocket = JSON.parse(msg.data)
-                let parsedData = JSON.parse(dataSocket.body)
-                
-            };
+            let dataSocket = JSON.parse(msg.data)
+            let parsedData = JSON.parse(dataSocket.body)
+        };
 
     }
-    
 
     const getDraw = async () => {
 
@@ -56,49 +49,17 @@ const Draw = (props) => {
     const sendMessage = async (msg) => {
         socket.send(JSON.stringify(msg))
         socket.onmessage = msg => {
-                let dataSocket = JSON.parse(msg.data)
-                let parsedData = JSON.parse(dataSocket.body)
-                console.log(parsedData)                
-            };
+            let dataSocket = JSON.parse(msg.data)
+            let parsedData = JSON.parse(dataSocket.body)
+            console.log(parsedData)
+        };
     }
 
-    const handleMouseDown = () => {
-        setIsPressing(true);
-    }
-
-    const handleMouseUp = () => {
-        setIsPressing(false);
-        setPrevLocation(null);
-    }
-
-    const handleMouseMove = (e) => {
-        if (!isPressing) {
-            return;
-        }
-
-        if (prevLocation == null) {
-            setPrevLocation({x: e.clientX, y: e.clientY});
-            return;
-        }
-
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
-
-        ctx.beginPath();
-        ctx.moveTo(prevLocation.x, prevLocation.y);
-        ctx.lineTo(e.clientX, e.clientY);
-        ctx.stroke();
-
-        setPrevLocation({x: e.clientX, y: e.clientY});
-    }
     return (
         <div className={classes.container}>
             <div className={classes.title}>
                 <h2>Bienvenu sur le salon: {name}</h2>
-                <span>c'est le tour de :</span>
+                <span>salon créé par: Lucas</span>
             </div>
             <div className={classes.game}>
 
@@ -128,24 +89,34 @@ const Draw = (props) => {
                             </ul>
                         </div>
                         <div className={classes.sending}>
-                            <input  type="text" className={classes.sendInput}/>
-                            <Button >Envoyer</Button>
+                            <input type="text" className={classes.sendInput}/>
+                            <Button>Envoyer</Button>
                         </div>
                     </div>
 
                     <div className={classes.canvas} id={'draw'}>
-                        <Drawing />
+                        <Drawing/>
+                        {/*<Canvas/>*/}
                     </div>
                 </div>
                 <div className={classes.informations}>
+                    <div className={classes.turn}>
+                        <span>C'est le tour de: Brian</span>
+                        <span>tour suivant: zohair</span>
+                    </div>
 
+                    <div className={classes.points}>
+                        <span>Lucas: 30 points</span>
+                        <span>Zohair: 30 points</span>
+                        <span>Brian: 30 points</span>
+                    </div>
                 </div>
 
             </div>
         </div>
     )
-    }
-export default Draw;
+}
+export default Room;
 
 
 const useStyles = makeStyles(theme => ({
@@ -194,9 +165,7 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 10,
         marginRight: 10,
     },
-    canvas: {
-
-    },
+    canvas: {},
     messages: {
         display: 'flex',
         flexDirection: 'column',
@@ -232,5 +201,17 @@ const useStyles = makeStyles(theme => ({
         width: '15vw',
         height: '80vh',
         border: '1px solid black'
+    },
+    turn: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    points: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }));
