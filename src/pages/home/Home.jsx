@@ -7,19 +7,18 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import TextField from '@material-ui/core/TextField';
 import {CreateRoomGame} from '../../_utils/api/queries';
 import apiVar from '../../_utils/api/apiVar';
 
-export default function Album() {
+export default function Album(props) {
     const classes = useStyles();
     const [name, setRoomName] = useState("")
     const [user, changeUser] = useState({})
+    const [goPlay, changeGoPlay] = useState(false)
 
     useEffect(() => {
         /*isLogged()*/
@@ -44,8 +43,10 @@ export default function Album() {
 
     const goToRoom = (id) => {
         if (apiVar.user) {
-            console.log(id)
+          console.log(id)
+          props.history.push('/salon/' + id)
         } else {
+          props.history.push('/connexion')
         }
     }
 
@@ -120,7 +121,6 @@ export default function Album() {
                     </Container>
                 </div>
             </div>
-
 
             <Container className={classes.cardGrid} maxWidth="md">
                 {/* End hero unit */}
