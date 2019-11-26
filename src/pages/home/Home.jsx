@@ -13,6 +13,8 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import {CreateRoomGame} from '../../_utils/api/queries';
 import apiVar from '../../_utils/api/apiVar';
+import {sendMsg} from "../../_utils/socket/socketManager";
+import {Redirect} from "react-router-dom";
 
 export default function Album(props) {
     const classes = useStyles();
@@ -21,6 +23,7 @@ export default function Album(props) {
     const [goPlay, changeGoPlay] = useState(false)
 
     useEffect(() => {
+        console.log()
         /*isLogged()*/
     })
 
@@ -33,20 +36,49 @@ export default function Album(props) {
         }
     }
 
-    const sendNewRoom = (e) => {
-        e.preventDefault();
-        CreateRoomGame(apiVar.createRoom, {
-            Admin: apiVar.id,
-            Name: name,
-        })
+    let socket = new WebSocket("ws://127.0.01:8000/ws");
+
+    let sendPosition = msg => {
+        console.log("sending msg: ", msg);
+        socket.send(JSON.stringify(msg));
+        return socket.onmessage = msg => {
+            const msgData = JSON.parse(msg.data)
+        };
+    };
+
+    const redirectTo = (url, data) => {
+        return (
+            <Redirect to={{
+                pathname: url,
+                state: data
+            }}/>
+        )
     }
+
+    const sendNewRoom = async (name) => {
+        let user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            await CreateRoomGame(apiVar.createRoom, {
+                AdminID: apiVar.user.id,
+                Name: name,
+            }).then(res => {
+                console.log(res)
+                goToRoom(name)
+            }).catch(error => {
+                throw new Error(error)
+            })
+        } else {
+            props.history.push('/connexion')
+        }
+    };
 
     const goToRoom = (id) => {
         if (apiVar.user) {
-          console.log(id)
-          props.history.push('/salon/' + id)
+            console.log(id)
+            localStorage.setItem('roomName', id)
+            props.history.push('/salon/' + id)
         } else {
-          props.history.push('/connexion')
+            props.history.push('/connexion')
         }
     }
 
@@ -78,7 +110,7 @@ export default function Album(props) {
                                     onChange={e => setRoomName(e.target.value)}
                                 />
                                 <Grid item>
-                                    <Button onClick={sendNewRoom} variant="contained" color="primary">
+                                    <Button onClick={() => sendNewRoom(name)} variant="contained" color="primary">
                                         Creer une nouvel Partie
                                     </Button>
                                 </Grid>
@@ -157,37 +189,37 @@ export default function Album(props) {
 
 
 const useStyles = makeStyles(theme => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    marginTop: 20,
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
-  },
+    icon: {
+        marginRight: theme.spacing(2),
+    },
+    heroContent: {
+        marginTop: 20,
+        width: '100%',
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(8, 0, 6),
+    },
+    heroButtons: {
+        marginTop: theme.spacing(4),
+    },
+    cardGrid: {
+        paddingTop: theme.spacing(8),
+        paddingBottom: theme.spacing(8),
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    cardMedia: {
+        paddingTop: '56.25%', // 16:9
+    },
+    cardContent: {
+        flexGrow: 1,
+    },
+    footer: {
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing(6),
+    },
 }));
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];

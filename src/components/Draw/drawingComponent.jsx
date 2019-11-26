@@ -7,6 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {socket} from "../../_utils/socket/socketManager";
+
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -30,6 +32,7 @@ function Drawing(props) {
     const [labelWidth, setLabelWidth] = React.useState(0);
     React.useEffect(() => {
         setLabelWidth(100);
+        console.log(socket)
     }, []);
 
     const handleChange = event => {
@@ -63,7 +66,10 @@ function Drawing(props) {
                     saveableCanvas.getSaveData()
                     console.log(saveableCanvas)
                 }}>Valider le dessin</Button>
-                <Button>Remettre a zéro</Button>
+                <Button onClick={() => {
+                    saveableCanvas.clear()
+                    console.log(saveableCanvas)
+                }}>Remettre a zéro</Button>
                 <FormControl className={classes.formControl}>
                     <InputLabel id="demo-simple-select-label">Couleurs</InputLabel>
                     <Select
