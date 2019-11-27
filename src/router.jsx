@@ -4,7 +4,7 @@ import history from "./_utils/history";
 import Home from "./pages/home/Home";
 import Ranking from "./pages/ranking/Ranking";
 import SignIn from "./pages/signin/SignIn";
-import Nav from "./components/nav/Navigation"
+import Nav from "./components/Nav/Navigation"
 import StickyFooter from "./components/Footer/StickyFooter";
 import {PrivateRoute} from "./middleware/privateRoute";
 import Notfound from "./components/404/NotFound";
