@@ -1,6 +1,8 @@
 //const socket = openSocket("http://localhost:3231");
-import io from "socket.io-client";
-/*const socket = io();
+//import io from "socket.io-client";
+/*var allowedOrigins = "localhost:* 127.0.0.1:*";
+const socket = io('http://localhost:8000',{origins:allowedOrigins})*/
+/*
 export function subscribeToMyId(callback) {
     socket.on("yourId", id => {
         callback(id);
@@ -107,4 +109,5 @@ export function sendChatMessage(username, message) {
 
 export const sendName = name => {
     socket.emit("name", name);
-};*/
+};
+*/

@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useEffect, useState, useRef}  from "react";
 import CanvasDraw from "react-canvas-draw";
+import Canvas from "./Canvas";
 import {Button, FormGroup, Label, Input, FormText} from 'reactstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -7,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+/*import {socket} from "../../_utils/socket/socketManager";*/
 
 
 const useStyles = makeStyles(theme => ({
@@ -23,16 +25,16 @@ const useStyles = makeStyles(theme => ({
 
 function Drawing(props) {
     const classes = useStyles();
-    const [colour, setColour] = React.useState('');
-    const [data, setData] = React.useState('');
-    const [turn, setTurn] = React.useState(false);
-    const [saveableCanvas, setSaveableCanvas] = React.useState('');
-    const [loadableCanvas, setLoadableCanvas] = React.useState('');
-    const [brush, setBrush] = React.useState(10);
+    const [colour, setColour] = useState('');
+    const [data, setData] = useState('');
+    const [turn, setTurn] = useState(false);
+    const [saveableCanvas, setSaveableCanvas] = useState('');
+    const [loadableCanvas, setLoadableCanvas] = useState('');
+    const [brush, setBrush] = useState(10);
 
-    const inputLabel = React.useRef(null);
-    const [labelWidth, setLabelWidth] = React.useState(0);
-    React.useEffect(() => {
+    const inputLabel = useRef(null);
+    const [labelWidth, setLabelWidth] = useState(0);
+    useEffect(() => {
         setLabelWidth(100);
         broadcastDraw()
     }, []);
