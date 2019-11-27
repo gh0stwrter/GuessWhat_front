@@ -47,21 +47,21 @@ function Canvas() {
             };
    }*/
 
- /*   const broadcastDraw =  async (clientX, clientY, prevX, prevY) => {
-        await console.log(clientX, clientY, prevX, prevY)
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        ctx.width = window.innerWidth;
-        ctx.height = window.innerHeight;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
-        ctx.beginPath();
-        ctx.moveTo(prevX, prevY);
-        ctx.lineTo(clientX, clientY);
-        ctx.stroke();
-        setPrevLocation({x: clientX, y: clientY});
-    }*/
+    /*   const broadcastDraw =  async (clientX, clientY, prevX, prevY) => {
+           await console.log(clientX, clientY, prevX, prevY)
+           const canvas = canvasRef.current;
+           const ctx = canvas.getContext("2d");
+           ctx.width = window.innerWidth;
+           ctx.height = window.innerHeight;
+           ctx.strokeStyle = color;
+           ctx.lineWidth = 5;
+           ctx.lineCap = "round";
+           ctx.beginPath();
+           ctx.moveTo(prevX, prevY);
+           ctx.lineTo(clientX, clientY);
+           ctx.stroke();
+           setPrevLocation({x: clientX, y: clientY});
+       }*/
 
     const handleMouseDown = () => {
         setIsPressing(true);
