@@ -1,16 +1,10 @@
 import React, {useEffect, useState, useRef} from "react";
-/*import apiVar from "../../_utils/api/apiVar";*/
 import {makeStyles} from '@material-ui/core/styles';
 import {TiUser} from "react-icons/ti";
 import Canvas from "./Canvas";
 import apiVar from "../../_utils/api/apiVar";
-
-import Drawing from './drawingComponent'
-/*import Canvas from './Canvas'*/
 import {socket} from "../../_utils/socket/socketManager"
-
 import {Button} from 'reactstrap';
-import {Test} from "../../components/api"
 
 const Room = (props) => {
     const classes = useStyles();
@@ -57,10 +51,10 @@ const Room = (props) => {
     }
     
     const sendReponse =  () => {
-        
         let dataReponse = {
             name: apiVar.user.name,
             reponse: reponse,
+            date: new Date(Date.now()).toLocaleDateString('fr')
         }
         socket.send(JSON.stringify(dataReponse))
         socket.onmessage = async msg => {
@@ -98,7 +92,7 @@ const Room = (props) => {
                         <div className={classes.received}>
                             <ul>
                                {socketData.reponses.map(item =>
-                                <li>{item.name}: {item.reponse}</li>
+                                <li>{}{item.name}: {item.reponse}</li>
                                 
                                 )}
                             </ul>

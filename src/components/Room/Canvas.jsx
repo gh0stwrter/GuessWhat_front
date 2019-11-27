@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import "../../index.css";
 
-const COLORS = ["red", "blue", "orange", "green", "yellow", "purple"];
+const COLORS = ["red", "blue", "orange", "green", "black", "purple"];
 
 const Controls = styled.menu`
   display:flex;
@@ -17,6 +17,9 @@ const ColorButton = styled.button`
   text-align: center;
   text-decoration: none;
   font-size: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  color: lightgrey;
 `;
 
 function Canvas() {
@@ -100,14 +103,6 @@ function Canvas() {
 
     return (
         <div>
-            <Controls>
-                {COLORS.map(c => (
-                    <ColorButton key={c} onClick={() => setColor(c)} color={c}>
-                        {c}
-                    </ColorButton>
-                ))}
-            </Controls>
-
             <div style={{display: 'flex', width: '100%', height: '100%'}}>
 
                 <canvas
@@ -129,6 +124,13 @@ function Canvas() {
                     onMouseMove={handleMouseMove}
                 />
             </div>
+            <Controls>
+                {COLORS.map(c => (
+                    <ColorButton key={c} onClick={() => setColor(c)} color={c}>
+                        {c}
+                    </ColorButton>
+                ))}
+            </Controls>
         </div>
     );
 }

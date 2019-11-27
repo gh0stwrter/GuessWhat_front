@@ -1,5 +1,5 @@
 import React from 'react'
-import Room from "../../components/Room/room";
+import Room from "../../components/Room/Room";
 
 
 const Room = () => {

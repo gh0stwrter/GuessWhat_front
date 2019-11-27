@@ -8,7 +8,7 @@ import Nav from "./components/Nav/Navigation"
 import StickyFooter from "./components/Footer/StickyFooter";
 import {PrivateRoute} from "./middleware/privateRoute";
 import Notfound from "./components/404/NotFound";
-import Room from "./components/Room/room";
+import Room from "./components/Room/Room";
 
 const Routes = (props) => {
   return (
