@@ -17,18 +17,15 @@ const Room = (props) => {
     const [prevLocation, setPrevLocation] = useState(null);
     const [reponse, setReponse] = useState('')
     const [socketData, setSocketData] = useState({
-        reponses: [{
-            name: '',
-            reponse:''
-        }],
+        reponses: [],
         position: []
     });
     
-console.log()
+console.log(socket)
+console.log(reponse)
     const getTurn = async () => {
 
     }
-
    /* const sendDraw = async (msg) => {
         socket.send(JSON.stringify(msg))
         socket.onmessage = msg => {
@@ -37,12 +34,7 @@ console.log()
         };
 
     }*/
-    
-    const sendMsg = (e) => {
-        e.preventDefault();
-        
-        
-    }
+
     const getDraw = async () => {
 
     }
@@ -51,8 +43,10 @@ console.log()
 
     }
 
+    
+
     const getMessage = async (reponseInput) => {
-        setReponse(reponseInput)
+       await setReponse(reponseInput)
         
     }
     const sendReponse =  () => {
@@ -70,15 +64,6 @@ console.log()
                     setSocketData({reponses:[...socketData.reponses.concat(parsedData)]})
                     console.log(socketData.reponses)
                 };
-    }
-
-    const handleMouseDown = () => {
-        setIsPressing(true);
-    }
-
-    const handleMouseUp = () => {
-        setIsPressing(false);
-        setPrevLocation(null);
     }
 
     return (
@@ -105,16 +90,14 @@ console.log()
                     <div className={classes.messages}>
                         <div className={classes.received}>
                             <ul>
-                                {
-                                    socketData.reponses.map( item =>
-                                    <li> {item.name}: {item.reponse} </li>
-                                        
-                                        )
-                                }                                
+                               {socketData.reponses.map(item =>
+                                <li>{item.name}: {item.reponse}</li>
+                                
+                                )}
                             </ul>
                         </div>
                         <div className={classes.sending}>
-                            <input onChange={e => getMessage(e.target.value)}type="text" className={classes.sendInput}/>
+                            <input onChange={e => getMessage(e.target.value)}  type="text" className={classes.sendInput}/>
                             <Button onClick={sendReponse}>Envoyer</Button>
                         </div>
                     </div>
