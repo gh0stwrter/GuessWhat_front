@@ -1,12 +1,12 @@
 import React from 'react'
-import Draw from "../../components/Draw/draw";
+import Room from "../../components/Room/room";
 
 
 const Room = () => {
     console.log('room')
         return (
             <div>
-                <Draw />
+                <Room />
             </div>
         )
 }

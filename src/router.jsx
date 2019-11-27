@@ -9,7 +9,7 @@ import StickyFooter from "./components/Footer/StickyFooter";
 import {socket} from "./_utils/socket/socketManager";
 import {PrivateRoute} from "./middleware/privateRoute";
 import Notfound from "./components/404/NotFound";
-import Draw from "./components/Draw/draw";
+import Room from "./components/Room/room";
 
 const Routes = (props) => {
   return (
@@ -19,7 +19,7 @@ const Routes = (props) => {
           {/* PAGES */}
           <Switch>
           <Route exec path='/classement' component={Ranking} />
-          <PrivateRoute path='/salon/:id' component={Draw} />
+          <PrivateRoute path='/salon/:id' component={Room} />
           <Route exact path='/' component={Home} />
           {/* COMPONENTS */}
           <Route exac path='/connexion' component={SignIn} />

@@ -50,6 +50,7 @@ const Navigation = (props) => {
     return (
         <Navbar expand="md" color="light" light
                 style={{position: 'fixed', width: '100%', backgroundColor: 'rgba(248, 249, 250, 0.6)'}}>
+            <span style={{fontSize: 18, fontWeight: 600}}>GuessWhat</span>
             {disconnect ? <Redirect to={'/connexion'}/> : null}
             <Nav className="" navbar>
                 {isLogged ? null :
@@ -87,11 +88,11 @@ const useStyles = makeStyles(theme => ({
         left: 10,
         top: 55,
         width: 150,
-        height: 270,
+        height: 280,
         display: 'flex',
         position: 'fixed',
         flexDirection: 'column',
-        backgroundColor: 'rgba(250, 250, 250, 1)',
+        backgroundColor: 'rgba(250, 250, 250)',
         border: '1px solid rgba(0, 0, 0)',
         borderRadius: 5,
         index: 999999,

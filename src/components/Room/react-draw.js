@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
+import PropTypes from   "prop-types";
 import { LazyBrush } from "lazy-brush";
 import { Catenary } from "catenary-curve";
 
@@ -164,7 +164,7 @@ export default class extends PureComponent {
         this.image = new Image();
         this.image.src = this.props.imgSrc;
 
-        // Draw the image once loaded
+        // Room the image once loaded
         this.image.onload = () =>
             drawImage({ ctx: this.ctx.grid, img: this.image });
     };
@@ -354,7 +354,7 @@ export default class extends PureComponent {
             // Add new point
             this.points.push(this.lazy.brush.toObject());
 
-            // Draw current points
+            // Room current points
             this.drawPoints({
                 points: this.points,
                 brushColor: this.props.brushColor,
@@ -392,7 +392,7 @@ export default class extends PureComponent {
             p1 = points[i];
             p2 = points[i + 1];
         }
-        // Draw last line as a straight line while
+        // Room last line as a straight line while
         // we wait for the next point to be able to calculate
         // the bezier control point
         this.ctx.temp.lineTo(p1.x, p1.y);
@@ -489,19 +489,19 @@ export default class extends PureComponent {
     drawInterface = (ctx, pointer, brush) => {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        // Draw brush preview
+        // Room brush preview
         ctx.beginPath();
         ctx.fillStyle = this.props.brushColor;
         ctx.arc(brush.x, brush.y, this.props.brushRadius, 0, Math.PI * 2, true);
         ctx.fill();
 
-        // Draw mouse point (the one directly at the cursor)
+        // Room mouse point (the one directly at the cursor)
         ctx.beginPath();
         ctx.fillStyle = this.props.catenaryColor;
         ctx.arc(pointer.x, pointer.y, 4, 0, Math.PI * 2, true);
         ctx.fill();
 
-        // Draw catenary
+        // Room catenary
         if (this.lazy.isEnabled()) {
             ctx.beginPath();
             ctx.lineWidth = 2;
@@ -517,7 +517,7 @@ export default class extends PureComponent {
             ctx.stroke();
         }
 
-        // Draw brush point (the one in the middle of the brush preview)
+        // Room brush point (the one in the middle of the brush preview)
         ctx.beginPath();
         ctx.fillStyle = this.props.catenaryColor;
         ctx.arc(brush.x, brush.y, 2, 0, Math.PI * 2, true);

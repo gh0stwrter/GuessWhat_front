@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -19,6 +19,7 @@ import {Redirect} from "react-router-dom";
 export default function Album(props) {
     const classes = useStyles();
     const [name, setRoomName] = useState("")
+    const [goRoom, setGoRoom] = useState(false)
     const [user, changeUser] = useState({})
     const [goPlay, changeGoPlay] = useState(false)
     const [dataSocket, setDataSocket] = useState({})
@@ -37,11 +38,9 @@ export default function Album(props) {
         }
     }
 
-
-
     const redirectTo = (url, data) => {
         return (
-            <Redirect to={{
+            <Redirect push to={{
                 pathname: url,
                 state: data
             }}/>
