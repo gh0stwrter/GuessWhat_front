@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import apiVar from "./apiVar";
 
 export const SignAuth = async (req, params) => {
+    console.log(params)
     const data = await axios.post(req, params)
         .then((res) => {
             console.log(res)

@@ -1,16 +1,22 @@
 import React, {useEffect, useState, useRef} from "react";
+/*import apiVar from "../../_utils/api/apiVar";*/
 import {makeStyles} from '@material-ui/core/styles';
-import Drawing from './drawingComponent'
-import Canvas from './Canvas'
-import apiVar from "../../_utils/api/apiVar";
-import {Button, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
 import {TiUser} from "react-icons/ti";
+import Canvas from "./Canvas";
+import apiVar from "../../_utils/api/apiVar";
+
+import Drawing from './drawingComponent'
+/*import Canvas from './Canvas'*/
 import {socket} from "../../_utils/socket/socketManager"
+
+import {Button} from 'reactstrap';
+import {Test} from "../../components/api"
 
 const Room = (props) => {
     const classes = useStyles();
-    const canvasRef = useRef(null);
-    const [name, nameChange] = useState(localStorage.getItem('roomName'))
+    /*const canvasRef = useRef(null);*/
+    const [name] = useState(localStorage.getItem('roomName'))
+    const [adminName] = useState(localStorage.getItem('roomName'))
     const [username, uChange] = useState('')
     const [userlist, changeUserList] = useState([])
     const [isPressing, setIsPressing] = useState(false);
@@ -20,20 +26,20 @@ const Room = (props) => {
         reponses: [],
         position: []
     });
-    
-console.log(socket)
-console.log(reponse)
+
+    useEffect(() => {
+        /*Test()*/
+
+    })
+
+
     const getTurn = async () => {
 
     }
-   /* const sendDraw = async (msg) => {
-        socket.send(JSON.stringify(msg))
-        socket.onmessage = msg => {
-            let dataSocket = JSON.parse(msg.data)
-            let parsedData = JSON.parse(dataSocket.body)
-        };
 
-    }*/
+    const sendDraw = async (msg) => {
+
+    }
 
     const getDraw = async () => {
 
@@ -49,6 +55,7 @@ console.log(reponse)
        await setReponse(reponseInput)
         
     }
+    
     const sendReponse =  () => {
         
         let dataReponse = {
@@ -103,8 +110,8 @@ console.log(reponse)
                     </div>
 
                     <div className={classes.canvas} id={'draw'}>
-                        <Drawing/>
-                        {/*<Canvas/>*/}
+                        {/*<Drawing/>*/}
+                        <Canvas/>
                     </div>
                 </div>
                 <div className={classes.informations}>
@@ -173,7 +180,10 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 10,
         marginRight: 10,
     },
-    canvas: {},
+    canvas: {
+        height: '100%',
+        width: '100%',
+    },
     messages: {
         display: 'flex',
         flexDirection: 'column',

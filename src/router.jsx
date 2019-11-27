@@ -6,7 +6,6 @@ import Ranking from "./pages/ranking/Ranking";
 import SignIn from "./pages/signin/SignIn";
 import Nav from "./components/Nav/Navigation"
 import StickyFooter from "./components/Footer/StickyFooter";
-import {socket} from "./_utils/socket/socketManager";
 import {PrivateRoute} from "./middleware/privateRoute";
 import Notfound from "./components/404/NotFound";
 import Room from "./components/Room/room";

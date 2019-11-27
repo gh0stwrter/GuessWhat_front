@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import {CreateRoomGame} from '../../_utils/api/queries';
 import apiVar from '../../_utils/api/apiVar';
-import {sendMsg} from "../../_utils/socket/socketManager";
+import {message} from "../../_utils/socket/socketManager";
 import {Redirect} from "react-router-dom";
 
 export default function Album(props) {
@@ -25,8 +25,8 @@ export default function Album(props) {
     const [dataSocket, setDataSocket] = useState({})
 
     useEffect(() => {
-        console.log()
         /*isLogged()*/
+
     })
 
     const isLogged = () => {
