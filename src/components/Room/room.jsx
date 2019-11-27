@@ -2,8 +2,10 @@ import React, {useEffect, useState, useRef} from "react";
 /*import apiVar from "../../_utils/api/apiVar";*/
 import {makeStyles} from '@material-ui/core/styles';
 import {TiUser} from "react-icons/ti";
+import Canvas from "./Canvas";
 
-/*import Drawing from './drawingComponent'*/
+
+import Drawing from './drawingComponent'
 /*import Canvas from './Canvas'*/
 import {socket} from "../../_utils/socket/socketManager"
 
@@ -100,7 +102,7 @@ const Room = (props) => {
 
                     <div className={classes.canvas} id={'draw'}>
                         {/*<Drawing/>*/}
-                        {/*<Canvas/>*/}
+                        <Canvas/>
                     </div>
                 </div>
                 <div className={classes.informations}>
@@ -169,7 +171,10 @@ const useStyles = makeStyles(theme => ({
         marginLeft: 10,
         marginRight: 10,
     },
-    canvas: {},
+    canvas: {
+        height: '100%',
+        width: '100%',
+    },
     messages: {
         display: 'flex',
         flexDirection: 'column',

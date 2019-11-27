@@ -1,13 +1,11 @@
 import io from 'socket.io-client';
 const adminSocket = io('ws://127.0.01:8000/ws', {
-    transportOptions: {
-        polling: {
-            xhrFields: {
-                withCredentials: true
-            },
-            crossDomain: true,
-        }
-    }
+    'reconnection limit':           10000,
+    'max reconnection attempts':    Infinity,
+    reconnection:                   true,
+    upgrade:                        true,
+    rememberUpgrade:                true,
+    transports:                     ['websocket']
 });
 
 adminSocket.onopen = () => {
@@ -24,15 +22,14 @@ adminSocket.onerror = error => {
     console.log("Socket Error: ", error);
 };
 
-
 /*
-
 export const socket = new WebSocket("ws://127.0.01:8000/ws");
 console.log("Attempting Connection...");
 
-socket.onopen = () => {
+socket.onopen = (callback) => {
     console.log("Successfully Connected");
     socket.send("Hi From the Client!")
+    console.log(callback)
 };
 
 socket.onclose = event => {
@@ -40,11 +37,16 @@ socket.onclose = event => {
     socket.send("Client Closed!")
 };
 
+socket.onmessage = (event) => {
+    console.log(event.data)
+}
+
 socket.onerror = error => {
     console.log("Socket Error: ", error);
 };
+*/
 
-const sendText = (id, data) => {
+/*const sendText = (id, data) => {
     const msg = {
         type: "message",
         text: data,
@@ -58,5 +60,5 @@ const sendText = (id, data) => {
         });
     }
 };
-sendText(1, 'coucou')
-*/
+sendText(1, 'coucou')*/
+
