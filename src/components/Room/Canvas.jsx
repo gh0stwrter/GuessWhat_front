@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 /*import {
     sendDrawInfo,
     sendFillInfo,
@@ -9,29 +9,38 @@ import React from "react";
     subscribeToMyId
 } from "../api";*/
 
-class Canvas extends React.Component {
-    constructor(props) {
-        super(props);
+export const Canvas = () => {
+    const classes = useStyles();
+    const [canvas, setCanvas] = useState({});
+    const [width, setWidth] = useState('100%');
+    const [height, setHeight] = useState('100%');
+    const [turn, setTurn] = useState(false);
+    const [ratio, setRatio] = useState(1);
+    const [radius, setRadius] = useState(10);
+    const [color, setColor] = useState([0, 0, 0]);
+    const [CanvasDatas, setCanvasDatas] = useState([]);
+    const [canvasDataIndex, setcanvasDataIndex] = useState(0);
+    const [prevTest, setprevTest] = useState([]);
+    const [testI, settestI] = useState(0);
+    const [myId, setmyId] = useState(-1);
+    const inputLabel = useRef(null);
 
-        this.state = {
-            width: 550,
-            height: 400,
-            turn: false,
-            ratio: 1,
+    useEffect(() => {
+        const canvas = this.refs.canvas;
+        const ctx = canvas.getContext("2d");
+        canvas.addEventListener("mousedown", onMouseDown, false);
+        window.addEventListener("mouseup", onMouseUp, false);
+        //canvas.addEventListener("keydown", this.onKeyDown, false);
 
-            radius: 10,
-            colour: [0, 0, 0],
-            tool: "brush",
+        this.setState({ ctx });
+        this.resetCanvas();
 
-            prevCanvasDatas: [],
-            canvasDataIndex: 0,
+        const ratio = canvas.clientWidth / canvas.width;
 
-            prevTest: [],
-            testI: 0,
+        this.setState({ ratio });
+    }, []);
 
-            myId: -1
-        };
-
+/*
         //this.onKeyDown = this.onKeyDown.bind(this);
 
         subscribeToMyId(id => {
@@ -62,22 +71,11 @@ class Canvas extends React.Component {
                 }
                 return state;
             });
-        });
+        });*/
     }
 
     componentDidMount() {
-        const canvas = this.refs.canvas;
-        const ctx = canvas.getContext("2d");
-        canvas.addEventListener("mousedown", this.onMouseDown, false);
-        window.addEventListener("mouseup", this.onMouseUp, false);
-        //canvas.addEventListener("keydown", this.onKeyDown, false);
 
-        this.setState({ ctx });
-        this.resetCanvas();
-
-        const ratio = canvas.clientWidth / canvas.width;
-
-        this.setState({ ratio });
     }
 
     //change this to from the state?
@@ -658,7 +656,7 @@ class Canvas extends React.Component {
             <div>
                 <div className="float-none">
                     <canvas
-                        ref="canvas"
+                        ref={canvas => (this.setState(canvas))}
                         onMouseMove={this.onMouseMove}
                         width={width}
                         height={height}
