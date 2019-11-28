@@ -82,12 +82,22 @@ const Room = (props) => {
                 <div className={classes.members}>
                     <div className={classes.online}>
                         <span><TiUser/>4 membres en lignes</span>
-                        <ul>
-                            <li>Brian</li>
+                        <ul style={{listStyle: 'none'}}>
+                            <li style={{align: 'left', marginRight: 30}}>Brian</li>
                             <li>Zohair</li>
                             <li>Lucas</li>
                             <li>...</li>
                         </ul>
+                    </div>
+                    <div className={classes.turn}>
+                        <span>C'est le tour de: Brian</span>
+                        <span>tour suivant: zohair</span>
+                    </div>
+
+                    <div className={classes.points}>
+                        <span>Lucas: 30 points</span>
+                        <span>Zohair: 30 points</span>
+                        <span>Brian: 30 points</span>
                     </div>
                 </div>
 
@@ -118,7 +128,9 @@ const Room = (props) => {
                                 if (event.keyCode === 13) {
                                     sendMessage();
                                 }
-                            }} type="text"
+                            }}
+                                   style={{boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"}}
+                                   type="text"
                                    className={classes.sendInput}/>
                             <Button onClick={sendMessage}>Envoyer</Button>
                         </div>
@@ -126,7 +138,7 @@ const Room = (props) => {
 
                     <div className={classes.canvas} id={'draw'}>
                         {/*<Drawing/>*/}
-                        <Canvas isTurn={apiVar.user.name === "Baba" ? true : false}
+                        <Canvas isTurn={apiVar.user.name === "Baba"}
                                 X={Broadcast.coords}
                                 Y={Broadcast.clientY}
                                 color={Broadcast.color}
@@ -136,19 +148,6 @@ const Room = (props) => {
                         />
                     </div>
                 </div>
-                <div className={classes.informations}>
-                    <div className={classes.turn}>
-                        <span>C'est le tour de: Brian</span>
-                        <span>tour suivant: zohair</span>
-                    </div>
-
-                    <div className={classes.points}>
-                        <span>Lucas: 30 points</span>
-                        <span>Zohair: 30 points</span>
-                        <span>Brian: 30 points</span>
-                    </div>
-                </div>
-
             </div>
         </div>
     )
@@ -175,41 +174,42 @@ const useStyles = makeStyles(theme => ({
     game: {
         display: 'flex',
         flexDirection: 'row',
+        width: '100%',
+        height: "100%",
     },
     members: {
         display: 'flex',
         flexDirection: 'column',
         width: '15vw',
         height: '80vh',
-        border: '1px solid black'
     },
     online: {
+        display: 'flex',
         width: '90%',
         height: '30%',
-        display: 'flex',
         flexDirection: 'column',
         border: '1px solid lightgrey',
         borderRadius: 5,
         margin: 11,
-        overflow: 'auto'
+        overflow: 'auto',
+        boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
     },
     draw: {
         display: 'flex',
         flexDirection: 'row',
-        width: '65vw',
-        height: '80vh',
-        border: '1px solid black',
+        width: '100%',
+        height: '60vh',
         marginLeft: 10,
         marginRight: 10,
     },
     canvas: {
         height: '100%',
-        width: '100%',
+        width: '80%',
     },
     messages: {
         display: 'flex',
         flexDirection: 'column',
-        width: '40%',
+        width: 400,
         height: "100%",
         margin: 10
     },
@@ -247,11 +247,21 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        border: '1px solid lightgrey',
+        borderRadius: 5,
+        margin: 11,
+        padding: 5,
+        boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
     },
     points: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        border: '1px solid lightgrey',
+        borderRadius: 5,
+        margin: 11,
+        padding: 5,
+        boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
     },
 }));

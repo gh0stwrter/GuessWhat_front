@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "../../index.css";
 import {socket} from "../../_utils/socket/socketManager";
 import apiVar from "../../_utils/api/apiVar";
+import {Button} from "@material-ui/core";
 
 const COLORS = ["red", "blue", "orange", "green", "black", "purple"];
 
@@ -37,6 +38,7 @@ function Canvas(props) {
     const [color, setColor] = useState(COLORS[0]);
 
     useEffect(() => {
+        console.log(canvasRef)
         if(isTurn) {
             drawingBroadcast();
         }
@@ -92,6 +94,7 @@ function Canvas(props) {
 
     const handleMouseMove = (e) => {
         if (!isTurn) {
+
             if (!isPressing) {
                 return;
             }
@@ -100,11 +103,9 @@ function Canvas(props) {
                 setPrevLocation({x: e.clientX, y: e.clientY});
                 return;
             }
-            const canvas = canvasRef.current;
 
+            const canvas = canvasRef.current;
             const ctx = canvas.getContext("2d");
-            ctx.width = window.innerWidth;
-            ctx.height = window.innerHeight;
             ctx.strokeStyle = color;
             ctx.lineWidth = brush;
             ctx.lineCap = "round";
@@ -119,25 +120,30 @@ function Canvas(props) {
 
     return (
         <div>
-            <div style={{display: 'flex', width: '100%', height: '100%'}}>
+            <div>
                 <canvas
                     style={{
                         marginTop: 10,
-                        width: '37vw',
-                        height: '65vh',
+                        width: window.innerWidth / 2,
+                        height: window.innerHeight / 2,
                         border: '1px solid lightgrey',
                         borderRadius: 5,
                         boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
                     }}
                     ref={canvasRef}
                     width={window.innerWidth}
-                    height={window.innerHeight}
+                    height={window.innerHeight / 2}
                     onMouseDown={!isTurn ? handleMouseDown : null}
                     onMouseUp={!isTurn ? handleMouseUp : null}
                     onMouseMove={!isTurn ? handleMouseMove : null}
                 />
             </div>
             <Controls>
+                <Button onClick={() => {
+                    const canvas = canvasRef.current;
+                    const ctx = canvas.getContext("2d");
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }}>Nettoyer</Button>
                 {COLORS.map(c => (
                     <ColorButton key={c} onClick={() => setColor(c)} color={c}>
                         {c}
@@ -146,6 +152,7 @@ function Canvas(props) {
                 <input style={{width: 40}} id="number" type="number" value={brush} onChange={(event) => {
                         setBrush(event.target.value)
                 }} />
+
             </Controls>
 
         </div>
