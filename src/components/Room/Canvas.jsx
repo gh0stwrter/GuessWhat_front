@@ -24,46 +24,61 @@ const ColorButton = styled.button`
   color: lightgrey;
 `;
 
-function Canvas() {
+function Canvas(props) {
     const canvasRef = useRef(null);
 
     const [isPressing, setIsPressing] = useState(false);
-    const [isTurn, setTurn] = useState(false);
+    const [isTurn, setTurn] = useState(props.isTurn);
     const [prevLocation, setPrevLocation] = useState(null);
-    const [sendY, setsendY] = useState(0);
+    const [brush, setBrush] = useState(5);
     const [sendX, setsendX] = useState(0);
     const [width, setWidth] = useState('37vw');
     const [height, setheight] = useState('65vh');
     const [color, setColor] = useState(COLORS[0]);
 
     useEffect(() => {
-
+        if(isTurn) {
+            drawingBroadcast();
+        }
     })
 
-    const broadcastDraw = async (clientX, clientY, prevX, prevY) => {
+    const sendDraw = async (clientX, clientY, prevX, prevY, isPressing, prevLocation) => {
         let data = {
             name: apiVar.user.name,
             type: "DRAW",
-            coords: clientX, clientY, prevX, prevY
+            coords: clientX, clientY, prevX, prevY,
+            color: color,
+            bursh: brush,
+            isPressing: isPressing,
+            prevLocation: prevLocation,
         }
         await socket.send(JSON.stringify(data))
     }
 
-    /*   const broadcastDraw =  async (clientX, clientY, prevX, prevY) => {
-           await console.log(clientX, clientY, prevX, prevY)
-           const canvas = canvasRef.current;
-           const ctx = canvas.getContext("2d");
-           ctx.width = window.innerWidth;
-           ctx.height = window.innerHeight;
-           ctx.strokeStyle = color;
-           ctx.lineWidth = 5;
-           ctx.lineCap = "round";
-           ctx.beginPath();
-           ctx.moveTo(prevX, prevY);
-           ctx.lineTo(clientX, clientY);
-           ctx.stroke();
-           setPrevLocation({x: clientX, y: clientY});
-       }*/
+    const drawingBroadcast = async () => {
+        if (!props.isPressing) {
+            return;
+        }
+
+        if(props.X !== 'undefined' && props.Y !== 'undefined'){
+            if (prevLocation == null) {
+                setPrevLocation({x: props.X, y: props.Y});
+                return;
+            }
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d");
+            ctx.width = window.innerWidth;
+            ctx.height = window.innerHeight;
+            ctx.strokeStyle = props.color;
+            ctx.lineWidth = props.brush;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(prevLocation.x, prevLocation.y);
+            ctx.lineTo(props.X, props.Y);
+            ctx.stroke();
+            setPrevLocation({x: props.X, y: props.Y});
+        }
+    }
 
     const handleMouseDown = () => {
         setIsPressing(true);
@@ -91,12 +106,12 @@ function Canvas() {
             ctx.width = window.innerWidth;
             ctx.height = window.innerHeight;
             ctx.strokeStyle = color;
-            ctx.lineWidth = 5;
+            ctx.lineWidth = brush;
             ctx.lineCap = "round";
             ctx.beginPath();
             ctx.moveTo(prevLocation.x, prevLocation.y);
             ctx.lineTo(e.clientX, e.clientY);
-            broadcastDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y);
+            sendDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y, isPressing, prevLocation);
             ctx.stroke();
             setPrevLocation({x: e.clientX, y: e.clientY});
         }
@@ -105,7 +120,6 @@ function Canvas() {
     return (
         <div>
             <div style={{display: 'flex', width: '100%', height: '100%'}}>
-
                 <canvas
                     style={{
                         marginTop: 10,
@@ -118,8 +132,6 @@ function Canvas() {
                     ref={canvasRef}
                     width={window.innerWidth}
                     height={window.innerHeight}
-                    /*width={width}
-                    height={height}*/
                     onMouseDown={!isTurn ? handleMouseDown : null}
                     onMouseUp={!isTurn ? handleMouseUp : null}
                     onMouseMove={!isTurn ? handleMouseMove : null}
@@ -131,7 +143,11 @@ function Canvas() {
                         {c}
                     </ColorButton>
                 ))}
+                <input style={{width: 40}} id="number" type="number" value={brush} onChange={(event) => {
+                        setBrush(event.target.value)
+                }} />
             </Controls>
+
         </div>
     );
 }

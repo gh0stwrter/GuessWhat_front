@@ -5,6 +5,10 @@ export let socket = new WebSocket("ws://127.0.01:8000/ws");
             socket.send("Hi From the Client!")
             socket.onmessage = (msg) => {
                 console.log(msg)
+                let data = JSON.stringify(msg.data)
+                console.log(JSON.stringify(data))
+                let messageServeur = JSON.stringify(data.body)
+                console.log(messageServeur)
             }
         };
         

@@ -5,17 +5,12 @@ import Canvas from "./Canvas";
 import apiVar from "../../_utils/api/apiVar";
 import {socket} from "../../_utils/socket/socketManager"
 import {Button} from 'reactstrap';
-import {red} from "@material-ui/core/colors";
 
 const Room = (props) => {
     const classes = useStyles();
     /*const canvasRef = useRef(null);*/
     const [name] = useState(localStorage.getItem('roomName'))
-    const [adminName] = useState(localStorage.getItem('roomName'))
     const [username, uChange] = useState(apiVar.user)
-    const [userlist, changeUserList] = useState([])
-    const [isPressing, setIsPressing] = useState(false);
-    const [prevLocation, setPrevLocation] = useState(null);
     const [reponse, setReponse] = useState('')
     const [Broadcast, setBroadcast] = useState([])
     const [socketData, setSocketData] = useState({
@@ -49,32 +44,16 @@ const Room = (props) => {
             let dataSocket = JSON.parse(msg.data)
             let parsedData = JSON.parse(dataSocket.body)
             if (parsedData.type === 'DRAW') {
-                console.log(parsedData)
+                if (parsedData.coords !== 'undefined' || parsedData.clientY !== 'undefined') {
+                    setBroadcast(parsedData)
+                }
             }
             if (parsedData.type === 'MESSAGE') {
                 setSocketData(() => (
                     {reponses: [...socketData.reponses, parsedData]}))
-                console.log(socketData)
             }
         };
     })
-
-
-    const getTurn = async () => {
-
-    }
-
-    const sendDraw = async (msg) => {
-
-    }
-
-    const getDraw = async () => {
-
-    }
-
-    const usersInRoom = async () => {
-
-    }
 
 
     const getMessage = async (reponseInput) => {
@@ -116,13 +95,19 @@ const Room = (props) => {
                     <div className={classes.messages}>
                         <div className={classes.received}>
                             <ul>
-                                {socketData.reponses.map((item, index) =>(
-                                    <li style={{listStyle: 'none'}} key={index}>
-                                        {item.reponse === "Viens de rejoindre le chat" ?
-                                            <span style={{fontWeight: 600, color: 'red'}}>{item.name} {item.reponse}{'\n'}</span>
-                                            : <span style={{fontWeight: 400, color: 'black'}}><strong>{item.date}</strong>, <strong>{item.name}</strong> :{item.reponse}{'\n'}</span> }
-                                        <hr/>
-                                    </li>
+                                {socketData.reponses.map((item, index) => (
+                                        <li style={{listStyle: 'none'}} key={index}>
+                                            {item.reponse === "Viens de rejoindre le chat" ?
+                                                <span style={{
+                                                    fontWeight: 600,
+                                                    color: 'red'
+                                                }}>{item.name} {item.reponse}{'\n'}</span>
+                                                : <span style={{
+                                                    fontWeight: 400,
+                                                    color: 'black'
+                                                }}><strong>{item.date}</strong>, <strong>{item.name}</strong> :{item.reponse}{'\n'}</span>}
+                                            <hr/>
+                                        </li>
 
                                     )
                                 )}
@@ -141,7 +126,14 @@ const Room = (props) => {
 
                     <div className={classes.canvas} id={'draw'}>
                         {/*<Drawing/>*/}
-                        <Canvas/>
+                        <Canvas isTurn={apiVar.user.name === "Baba" ? true : false}
+                                X={Broadcast.coords}
+                                Y={Broadcast.clientY}
+                                color={Broadcast.color}
+                                brush={Broadcast.bursh}
+                                isPressing={Broadcast.isPressing}
+                                prevLocation={Broadcast.prevLocation}
+                        />
                     </div>
                 </div>
                 <div className={classes.informations}>
