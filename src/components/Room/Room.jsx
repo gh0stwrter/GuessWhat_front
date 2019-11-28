@@ -22,7 +22,28 @@ const Room = (props) => {
     });
 
     useEffect(() => {
-        /*Test()*/
+        socket.onopen = () => {
+            socket.onmessage =  msg => {
+                console.log(msg)
+            }
+        };
+        
+        socket.onclose = event => {
+            console.log("Socket Closed Connection: ", event);
+            socket.send("Client Closed!")
+        };
+
+        socket.onerror = error => {
+            console.log("Socket Error: ", error);
+        };
+        socket.onmessage =  msg => {
+            console.log(msg)
+            let dataSocket = JSON.parse(msg.data)
+            let parsedData =  JSON.parse(dataSocket.body)
+            setSocketData(prevState => (
+            {reponses:[...socketData.reponses,parsedData]}))
+            console.log(socketData)
+        };
 
     })
 
@@ -57,14 +78,6 @@ const Room = (props) => {
             date: new Date(Date.now()).toLocaleDateString('fr')
         }
         socket.send(JSON.stringify(dataReponse))
-        socket.onmessage = async msg => {
-            console.log(msg)
-
-                let dataSocket = JSON.parse(msg.data)
-                let parsedData =  JSON.parse(dataSocket.body)
-                    setSocketData({reponses:[...socketData.reponses.concat(parsedData)]})
-                    console.log(socketData.reponses)
-                };
     }
 
     return (

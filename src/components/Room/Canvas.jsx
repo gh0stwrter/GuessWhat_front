@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import "../../index.css";
+import { socket } from "../../_utils/socket/socketManager";
 
 const COLORS = ["red", "blue", "orange", "green", "black", "purple"];
 
@@ -74,7 +75,9 @@ function Canvas() {
         setIsPressing(false);
         setPrevLocation(null);
     }
-
+    const drawComponent = () => {
+       
+    }
     const handleMouseMove = (e) => {
         if (!isPressing) {
             return;
@@ -85,6 +88,10 @@ function Canvas() {
             return;
         }
 
+         socket.send(setPrevLocation)
+         socket.onmessage = (msg) =>{
+            console.log(msg)
+         }
         const canvas = canvasRef.current;
 
         const ctx = canvas.getContext("2d");
@@ -99,6 +106,7 @@ function Canvas() {
         /*broadcastDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y);*/
         ctx.stroke();
         setPrevLocation({x: e.clientX, y: e.clientY});
+       
     }
 
     return (
