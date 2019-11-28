@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +14,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import apiVar from "../../_utils/api/apiVar";
 import {SignAuth, SignUp} from "../../_utils/api/queries"
 import {Redirect} from 'react-router-dom';
+import { store } from 'react-notifications-component';
+import axios from "axios";
+
+
+
 
 function Copyright() {
     return (
@@ -64,6 +69,9 @@ export default function SignInSide(props) {
     const [password, pChange] = useState('')
     const [logged, loggedChange] = useState(false)
     const [showSignUp, showSignUpChange] = useState(false)
+    useEffect(() => {
+
+    })
 
     const goReq = async (e) => {
         e.preventDefault();
@@ -78,9 +86,30 @@ export default function SignInSide(props) {
     };
 
     const createNewUser = async () => {
-        await SignUp(apiVar.signUp,{
-            Name: username,
-            Password: password
+        await axios.get(apiVar.users).then(res => {
+            console.log(res)
+            let users = res.data;
+            let check = users.find(user => user.Name === username)
+            if(check){
+                store.addNotification({
+                    title: "Nom deja pris",
+                    message: 'Cet Identifiants est deja enregistré',
+                    type: "warning",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
+            } else {
+                SignUp(apiVar.signUp,{
+                    Name: username,
+                    Password: password
+                })
+            }
         })
 
     }
@@ -133,7 +162,6 @@ export default function SignInSide(props) {
                                 label="Remember me"
                             />
                             <Button
-                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"

@@ -22,6 +22,7 @@ const Room = (props) => {
         socket.onopen = (event) => {
             console.log("New Socket Connection: ", event);
             socket.send(apiVar.user.name + ' Just connected to socket')
+
             let dataReponse = {
                 type: "MESSAGE",
                 name: apiVar.user.name,

@@ -9,6 +9,7 @@ let user = JSON.parse(localStorage.getItem("user"))
         user: user,
         name: localName,
         id: localId,
+        users: path + "/users",
         signUp: path + "/sign-up",
         signIn: path + "/sign-in",
         logout: path + "/logout",

@@ -1,6 +1,7 @@
 import axios from "axios";
 import jwt from 'jsonwebtoken';
 import apiVar from "./apiVar";
+import {store} from "react-notifications-component";
 
 export const SignAuth = async (req, params) => {
     console.log(params)
@@ -19,14 +20,65 @@ export const SignAuth = async (req, params) => {
                     };
                     localStorage.setItem('user', JSON.stringify(user));
                     apiVar.user = JSON.parse(localStorage.getItem('user'));
+                    store.addNotification({
+                        title: "Wonderful!",
+                        message: "Vous êtes connecté avec succés",
+                        type: "success",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    })
+                } else {
+                    store.addNotification({
+                        title: "Error",
+                        message: "Mauvais mot de passe ou Identifiant",
+                        type: "danger",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    })
                 }
                 return true;
             } else {
-                return "Mauvais Mot de passe ou Nom"
+                store.addNotification({
+                    title: "Error",
+                    message: "Mauvais mot de passe ou Identifiant",
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
             }
         })
         .catch(function (error) {
-            console.log(error);
+            store.addNotification({
+                title: "Error",
+                message: 'Mauvais mot de passe ou Identifiant',
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            })
         })
     return data
 }
@@ -36,9 +88,34 @@ export const SignUp = async (req, params) => {
     await axios.post(req, params)
         .then(function (res) {
             console.log(res);
+            store.addNotification({
+                title: "Bienvenu ! ",
+                message: 'Compte inscris avec succés',
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            })
         })
         .catch(function (error) {
-            console.log(error);
+            store.addNotification({
+                title: "Error",
+                message: '' + error,
+                type: "danger",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            })
         })
 }
 
@@ -46,7 +123,19 @@ export const SignUp = async (req, params) => {
 export const CreateRoomGame = async (req, params) => {
     await axios.post(req, params)
         .then(res => {
-            console.log(res)
+            store.addNotification({
+                title: "Salon bien ajouté",
+                message: 'votre salon est créé',
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            })
         })
         .catch(error => {
             console.log(error);
