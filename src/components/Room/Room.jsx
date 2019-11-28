@@ -8,11 +8,10 @@ import {Button} from 'reactstrap';
 
 const Room = (props) => {
     const classes = useStyles();
-    /*const canvasRef = useRef(null);*/
-    const [name] = useState(localStorage.getItem('roomName'))
-    const [username, uChange] = useState(apiVar.user)
-    const [reponse, setReponse] = useState('')
-    const [Broadcast, setBroadcast] = useState([])
+    const [name] = useState(localStorage.getItem('roomName'));
+    const [username, uChange] = useState(apiVar.user);
+    const [reponse, setReponse] = useState('');
+    const [Broadcast, setBroadcast] = useState([]);
     const [socketData, setSocketData] = useState({
         reponses: [],
         position: []
@@ -20,30 +19,27 @@ const Room = (props) => {
 
     useEffect(() => {
         socket.onopen = (event) => {
+            console.log('connected to socket bitch')
             console.log("New Socket Connection: ", event);
-            socket.send(apiVar.user.name + ' Just connected to socket')
-
+            socket.send(apiVar.user.name + ' Just connected to socket');
             let dataReponse = {
                 type: "MESSAGE",
                 name: apiVar.user.name,
                 reponse: "Viens de rejoindre le chat",
                 date: new Date(Date.now()).toLocaleDateString('fr')
-            }
-            socket.send(JSON.stringify(dataReponse))
+            };
+            socket.send(JSON.stringify(dataReponse));
         };
-
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
             socket.send("Client Closed!")
         };
-
         socket.onerror = error => {
             console.log("Socket Error: ", error);
         };
         socket.onmessage = msg => {
-            console.log(JSON.parse(msg.data))
-            let dataSocket = JSON.parse(msg.data)
-            let parsedData = JSON.parse(dataSocket.body)
+            let dataSocket = JSON.parse(msg.data);
+            let parsedData = JSON.parse(dataSocket.body);
             if (parsedData.type === 'DRAW') {
                 if (parsedData.coords !== 'undefined' || parsedData.clientY !== 'undefined') {
                     setBroadcast(parsedData)
@@ -54,13 +50,13 @@ const Room = (props) => {
                     {reponses: [...socketData.reponses, parsedData]}))
             }
         };
-    })
+    });
 
 
     const getMessage = async (reponseInput) => {
         await setReponse(reponseInput)
 
-    }
+    };
 
     const sendMessage = () => {
         let dataReponse = {
@@ -68,9 +64,9 @@ const Room = (props) => {
             name: apiVar.user.name,
             reponse: reponse,
             date: new Date(Date.now()).toLocaleTimeString('fr')
-        }
-        socket.send(JSON.stringify(dataReponse))
-    }
+        };
+        socket.send(JSON.stringify(dataReponse));
+    };
 
     return (
         <div className={classes.container}>
@@ -79,7 +75,6 @@ const Room = (props) => {
                 <span>salon créé par: Lucas</span>
             </div>
             <div className={classes.game}>
-
                 <div className={classes.members}>
                     <div className={classes.online}>
                         <span><TiUser/>4 membres en lignes</span>
@@ -112,7 +107,7 @@ const Room = (props) => {
                                                 <span style={{
                                                     fontWeight: 600,
                                                     color: 'red'
-                                                }}>{item.name} {item.reponse}{'\n'}</span>
+                                                }}>{item.name}{' viens de rejoindre le salon'}{'\n'}</span>
                                                 : <span style={{
                                                     fontWeight: 400,
                                                     color: 'black'
@@ -125,21 +120,24 @@ const Room = (props) => {
                             </ul>
                         </div>
                         <div className={classes.sending}>
-                            <input onChange={e => getMessage(e.target.value)} onKeyUp={(event) => {
+                            <input onChange={e => getMessage(e.target.value) } onKeyUp={(event) => {
                                 if (event.keyCode === 13) {
                                     sendMessage();
+
                                 }
                             }}
                                    style={{boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"}}
                                    type="text"
                                    className={classes.sendInput}/>
-                            <Button onClick={sendMessage}>Envoyer</Button>
+                            <Button onClick={() => {
+                                sendMessage();
+                            }}>Envoyer</Button>
                         </div>
                     </div>
 
                     <div className={classes.canvas} id={'draw'}>
                         {/*<Drawing/>*/}
-                        <Canvas isTurn={apiVar.user.name === "Baba"}
+                        <Canvas isTurn={apiVar.user.name === "Brian"}
                                 X={Broadcast.coords}
                                 Y={Broadcast.clientY}
                                 color={Broadcast.color}

@@ -38,7 +38,6 @@ function Canvas(props) {
     const [color, setColor] = useState(COLORS[0]);
 
     useEffect(() => {
-        console.log(canvasRef)
         if(isTurn) {
             drawingBroadcast();
         }
