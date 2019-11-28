@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import "../../index.css";
-import { socket } from "../../_utils/socket/socketManager";
+import {socket} from "../../_utils/socket/socketManager";
+import apiVar from "../../_utils/api/apiVar";
 
 const COLORS = ["red", "blue", "orange", "green", "black", "purple"];
 
@@ -27,6 +28,7 @@ function Canvas() {
     const canvasRef = useRef(null);
 
     const [isPressing, setIsPressing] = useState(false);
+    const [isTurn, setTurn] = useState(false);
     const [prevLocation, setPrevLocation] = useState(null);
     const [sendY, setsendY] = useState(0);
     const [sendX, setsendX] = useState(0);
@@ -35,21 +37,17 @@ function Canvas() {
     const [color, setColor] = useState(COLORS[0]);
 
     useEffect(() => {
-        console.log(canvasRef.current)
-        console.log(canvasRef)
+
     })
 
-    /*   const broadcastDraw =  async (clientX, clientY, prevX, prevY) => {
-            let drawBroadcasting = {
-                 clientX,
-                 clientY,
-                 prevX,
-                 prevY
-            }
-            socket.onmessage = (draw) => {
-                JSON.stringify(draw);
-            };
-   }*/
+    const broadcastDraw = async (clientX, clientY, prevX, prevY) => {
+        let data = {
+            name: apiVar.user.name,
+            type: "DRAW",
+            coords: clientX, clientY, prevX, prevY
+        }
+        await socket.send(JSON.stringify(data))
+    }
 
     /*   const broadcastDraw =  async (clientX, clientY, prevX, prevY) => {
            await console.log(clientX, clientY, prevX, prevY)
@@ -75,38 +73,33 @@ function Canvas() {
         setIsPressing(false);
         setPrevLocation(null);
     }
-    const drawComponent = () => {
-       
-    }
+
+
     const handleMouseMove = (e) => {
-        if (!isPressing) {
-            return;
-        }
+        if (!isTurn) {
+            if (!isPressing) {
+                return;
+            }
 
-        if (prevLocation == null) {
+            if (prevLocation == null) {
+                setPrevLocation({x: e.clientX, y: e.clientY});
+                return;
+            }
+            const canvas = canvasRef.current;
+
+            const ctx = canvas.getContext("2d");
+            ctx.width = window.innerWidth;
+            ctx.height = window.innerHeight;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 5;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(prevLocation.x, prevLocation.y);
+            ctx.lineTo(e.clientX, e.clientY);
+            broadcastDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y);
+            ctx.stroke();
             setPrevLocation({x: e.clientX, y: e.clientY});
-            return;
         }
-
-         socket.send(setPrevLocation)
-         socket.onmessage = (msg) =>{
-            console.log(msg)
-         }
-        const canvas = canvasRef.current;
-
-        const ctx = canvas.getContext("2d");
-        ctx.width = window.innerWidth;
-        ctx.height = window.innerHeight;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
-        ctx.beginPath();
-        ctx.moveTo(prevLocation.x, prevLocation.y);
-        ctx.lineTo(e.clientX, e.clientY);
-        /*broadcastDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y);*/
-        ctx.stroke();
-        setPrevLocation({x: e.clientX, y: e.clientY});
-       
     }
 
     return (
@@ -127,9 +120,9 @@ function Canvas() {
                     height={window.innerHeight}
                     /*width={width}
                     height={height}*/
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={handleMouseUp}
-                    onMouseMove={handleMouseMove}
+                    onMouseDown={!isTurn ? handleMouseDown : null}
+                    onMouseUp={!isTurn ? handleMouseUp : null}
+                    onMouseMove={!isTurn ? handleMouseMove : null}
                 />
             </div>
             <Controls>

@@ -5,29 +5,37 @@ import Canvas from "./Canvas";
 import apiVar from "../../_utils/api/apiVar";
 import {socket} from "../../_utils/socket/socketManager"
 import {Button} from 'reactstrap';
+import {red} from "@material-ui/core/colors";
 
 const Room = (props) => {
     const classes = useStyles();
     /*const canvasRef = useRef(null);*/
     const [name] = useState(localStorage.getItem('roomName'))
     const [adminName] = useState(localStorage.getItem('roomName'))
-    const [username, uChange] = useState('')
+    const [username, uChange] = useState(apiVar.user)
     const [userlist, changeUserList] = useState([])
     const [isPressing, setIsPressing] = useState(false);
     const [prevLocation, setPrevLocation] = useState(null);
     const [reponse, setReponse] = useState('')
+    const [Broadcast, setBroadcast] = useState([])
     const [socketData, setSocketData] = useState({
         reponses: [],
         position: []
     });
 
     useEffect(() => {
-        socket.onopen = () => {
-            socket.onmessage =  msg => {
-                console.log(msg)
+        socket.onopen = (event) => {
+            console.log("New Socket Connection: ", event);
+            socket.send(apiVar.user.name + ' Just connected to socket')
+            let dataReponse = {
+                type: "MESSAGE",
+                name: apiVar.user.name,
+                reponse: "Viens de rejoindre le chat",
+                date: new Date(Date.now()).toLocaleDateString('fr')
             }
+            socket.send(JSON.stringify(dataReponse))
         };
-        
+
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
             socket.send("Client Closed!")
@@ -36,15 +44,19 @@ const Room = (props) => {
         socket.onerror = error => {
             console.log("Socket Error: ", error);
         };
-        socket.onmessage =  msg => {
-            console.log(msg)
+        socket.onmessage = msg => {
+            console.log(JSON.parse(msg.data))
             let dataSocket = JSON.parse(msg.data)
-            let parsedData =  JSON.parse(dataSocket.body)
-            setSocketData(prevState => (
-            {reponses:[...socketData.reponses,parsedData]}))
-            console.log(socketData)
+            let parsedData = JSON.parse(dataSocket.body)
+            if (parsedData.type === 'DRAW') {
+                console.log(parsedData)
+            }
+            if (parsedData.type === 'MESSAGE') {
+                setSocketData(() => (
+                    {reponses: [...socketData.reponses, parsedData]}))
+                console.log(socketData)
+            }
         };
-
     })
 
 
@@ -64,18 +76,18 @@ const Room = (props) => {
 
     }
 
-    
 
     const getMessage = async (reponseInput) => {
-       await setReponse(reponseInput)
-        
+        await setReponse(reponseInput)
+
     }
-    
-    const sendReponse =  () => {
+
+    const sendMessage = () => {
         let dataReponse = {
+            type: "MESSAGE",
             name: apiVar.user.name,
             reponse: reponse,
-            date: new Date(Date.now()).toLocaleDateString('fr')
+            date: new Date(Date.now()).toLocaleTimeString('fr')
         }
         socket.send(JSON.stringify(dataReponse))
     }
@@ -90,7 +102,7 @@ const Room = (props) => {
 
                 <div className={classes.members}>
                     <div className={classes.online}>
-                        <span><TiUser sty/>4 membres en lignes</span>
+                        <span><TiUser/>4 membres en lignes</span>
                         <ul>
                             <li>Brian</li>
                             <li>Zohair</li>
@@ -104,15 +116,26 @@ const Room = (props) => {
                     <div className={classes.messages}>
                         <div className={classes.received}>
                             <ul>
-                               {socketData.reponses.map(item =>
-                                <li>{}{item.name}: {item.reponse}</li>
-                                
+                                {socketData.reponses.map((item, index) =>(
+                                    <li style={{listStyle: 'none'}} key={index}>
+                                        {item.reponse === "Viens de rejoindre le chat" ?
+                                            <span style={{fontWeight: 600, color: 'red'}}>{item.name} {item.reponse}{'\n'}</span>
+                                            : <span style={{fontWeight: 400, color: 'black'}}><strong>{item.date}</strong>, <strong>{item.name}</strong> :{item.reponse}{'\n'}</span> }
+                                        <hr/>
+                                    </li>
+
+                                    )
                                 )}
                             </ul>
                         </div>
                         <div className={classes.sending}>
-                            <input onChange={e => getMessage(e.target.value)}  type="text" className={classes.sendInput}/>
-                            <Button onClick={sendReponse}>Envoyer</Button>
+                            <input onChange={e => getMessage(e.target.value)} onKeyUp={(event) => {
+                                if (event.keyCode === 13) {
+                                    sendMessage();
+                                }
+                            }} type="text"
+                                   className={classes.sendInput}/>
+                            <Button onClick={sendMessage}>Envoyer</Button>
                         </div>
                     </div>
 
