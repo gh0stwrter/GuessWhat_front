@@ -126,20 +126,21 @@ function Canvas(props) {
                         marginTop: 10,
                         width: window.innerWidth / 2,
                         height: window.innerHeight / 2,
+                        position: "relative",
                         border: '1px solid lightgrey',
                         borderRadius: 5,
                         boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
                     }}
                     ref={canvasRef}
                     width={window.innerWidth}
-                    height={window.innerHeight / 2}
+                    height={window.innerHeight}
                     onMouseDown={!isTurn ? handleMouseDown : null}
                     onMouseUp={!isTurn ? handleMouseUp : null}
                     onMouseMove={!isTurn ? handleMouseMove : null}
                 />
             </div>
             <Controls>
-                <Button onClick={() => {
+                <Button style={{width: 80, height: 50, marginTop: 5, marginRight: 5}} onClick={() => {
                     const canvas = canvasRef.current;
                     const ctx = canvas.getContext("2d");
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -149,7 +150,7 @@ function Canvas(props) {
                         {c}
                     </ColorButton>
                 ))}
-                <input style={{width: 40}} id="number" type="number" value={brush} onChange={(event) => {
+                <input style={{width: 40, height: 40, marginTop: 12}} id="number" type="number" value={brush} onChange={(event) => {
                         setBrush(event.target.value)
                 }} />
 
