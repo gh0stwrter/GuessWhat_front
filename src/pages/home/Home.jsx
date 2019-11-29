@@ -25,11 +25,26 @@ export default function Album(props) {
     const [user, changeUser] = useState({})
     const [goPlay, changeGoPlay] = useState(false)
     const [dataSocket, setDataSocket] = useState({})
+    const [allRooms, setAllRooms] = useState([]);
+    const [Rooms, setRooms] = useState({})
+    const [first, setFirst] = useState(true)
 
     useEffect(() => {
         /*isLogged()*/
+        if (first === true) {
+            getRooms();
+            setFirst(false)
+        }
+    }, [first])
 
-    })
+    const getRooms = async () => {
+        await axios.get(apiVar.rooms).then(res => {
+            setAllRooms([...allRooms, res.data])
+/*            res.data.map(room => {
+                allRooms.push(room)
+            });*/
+        })
+    };
 
     const isLogged = () => {
         let user = JSON.parse(localStorage.getItem('user'))
@@ -167,32 +182,34 @@ export default function Album(props) {
             </div>
 
             <Container className={classes.cardGrid} maxWidth="md">
-                {/* End hero unit */}
                 <Grid container spacing={4}>
-                    {cards.map((card, index) => (
-                        <Grid item key={card} xs={12} sm={6} md={4}>
-                            <Card className={classes.card}>
-                                <CardMedia
-                                    className={classes.cardMedia}
-                                    image="https://source.unsplash.com/random"
-                                    title={"Image title " + index}
-                                />
-                                <CardContent className={classes.cardContent}>
-                                    <Typography gutterBottom variant="h5" component="h2">
-                                        Heading {index}
-                                    </Typography>
-                                    <Typography>
-                                        This is a media card. You can use this section to describe the content.
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button size="small" color="primary" onClick={() => goToRoom(index)}>
-                                        Rejoindre
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
+                    {console.log(allRooms)}
+                    {allRooms ?
+                        allRooms.map(card => (
+                            <Grid item key={card} xs={12} sm={6} md={4}>
+
+                                <Card className={classes.card}>
+                                    <CardMedia
+                                        className={classes.cardMedia}
+                                        image="https://source.unsplash.com/random"
+                                        title={"Image title "}
+                                    />
+                                    <CardContent className={classes.cardContent}>
+                                        <Typography gutterBottom variant="h5" component="h2">
+                                            {card.Name} {card.Admin}
+                                         </Typography>
+                                        <Typography>
+                                            This is a media card. You can use this section to describe the content.
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small" color="primary" onClick={() => goToRoom(card.Name)}>
+                                            Rejoindre
+                                        </Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        )) : null}
                 </Grid>
             </Container>
         </React.Fragment>
