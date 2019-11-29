@@ -82,8 +82,8 @@ function Canvas(props) {
             ctx.lineWidth = props.brush;
             ctx.lineCap = "round";
             ctx.beginPath();
-            ctx.moveTo(prevLocation.x, prevLocation.y);
-            ctx.lineTo(props.X, props.Y);
+            ctx.moveTo(prevLocation.x - 640, prevLocation.y - 160);
+            ctx.lineTo(props.X - 640, props.Y - 160) ;
             ctx.stroke();
             setPrevLocation({x: props.X, y: props.Y});
         }
@@ -129,8 +129,8 @@ function Canvas(props) {
             ctx.lineWidth = brush;
             ctx.lineCap = "round";
             ctx.beginPath();
-            ctx.moveTo(prevLocation.x, prevLocation.y);
-            ctx.lineTo(e.clientX, e.clientY);
+            ctx.moveTo(prevLocation.x - 640, prevLocation.y - 160);
+            ctx.lineTo(e.clientX - 640, e.clientY - 160);
             console.log(e.clientX, e.clientY)
             sendDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y, isPressing, prevLocation);
             ctx.stroke();
@@ -144,16 +144,16 @@ function Canvas(props) {
                 <canvas
                     style={{
                         marginTop: 10,
-                        width: 700,
-                        height: 500,
+                        width: 900,
+                        height: 700,
                         position: "relative",
                         border: '1px solid lightgrey',
                         borderRadius: 5,
                         boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"
                     }}
                     ref={canvasRef}
-                    width={window.innerWidth}
-                    height={window.innerHeight}
+                    width={900}
+                    height={700}
                     onMouseDown={!isTurn ? handleMouseDown : null}
                     onMouseUp={!isTurn ? handleMouseUp : null}
                     onMouseMove={!isTurn ? handleMouseMove : null}
