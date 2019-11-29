@@ -32,16 +32,25 @@ function Canvas(props) {
     const [isTurn, setTurn] = useState(props.isTurn);
     const [prevLocation, setPrevLocation] = useState(null);
     const [brush, setBrush] = useState(5);
+    const [clear, setClear] = useState(props.clear);
     const [sendX, setsendX] = useState(0);
     const [width, setWidth] = useState('37vw');
     const [height, setheight] = useState('65vh');
     const [color, setColor] = useState(COLORS[0]);
 
     useEffect(() => {
-        if(isTurn) {
-            drawingBroadcast();
+        if(props.clear){
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-    })
+        if (isTurn) {
+            drawingBroadcast().then(res => console.log(res)).catch(error => {
+                throw new Error(error)
+            });
+        }
+        // eslint-disable-next-line no-use-before-define
+    }, [isTurn, props]);
 
     const sendDraw = async (clientX, clientY, prevX, prevY, isPressing, prevLocation) => {
         let data = {
@@ -60,8 +69,7 @@ function Canvas(props) {
         if (!props.isPressing) {
             return;
         }
-
-        if(props.X !== 'undefined' && props.Y !== 'undefined'){
+        if (props.X !== 'undefined' && props.Y !== 'undefined') {
             if (prevLocation == null) {
                 setPrevLocation({x: props.X, y: props.Y});
                 return;
@@ -79,31 +87,43 @@ function Canvas(props) {
             ctx.stroke();
             setPrevLocation({x: props.X, y: props.Y});
         }
-    }
+    };
 
     const handleMouseDown = () => {
         setIsPressing(true);
-    }
+        let sendIsPressing = {
+            type: "PRESSING",
+            value: true,
+            room: localStorage.getItem('roomName'),
+        };
+        socket.send(JSON.stringify(sendIsPressing));
+    };
 
     const handleMouseUp = () => {
         setIsPressing(false);
         setPrevLocation(null);
-    }
+        let sendIsPressing = {
+            type: "PRESSING",
+            value: false,
+            prevLocation: null,
+            room: localStorage.getItem('roomName'),
+        };
+        socket.send(JSON.stringify(sendIsPressing));
+    };
 
 
     const handleMouseMove = (e) => {
         if (!isTurn) {
-
             if (!isPressing) {
                 return;
             }
-
             if (prevLocation == null) {
                 setPrevLocation({x: e.clientX, y: e.clientY});
                 return;
             }
-
             const canvas = canvasRef.current;
+            /*canvas.width = 800;
+            canvas.height = 800;*/
             const ctx = canvas.getContext("2d");
             ctx.strokeStyle = color;
             ctx.lineWidth = brush;
@@ -111,11 +131,12 @@ function Canvas(props) {
             ctx.beginPath();
             ctx.moveTo(prevLocation.x, prevLocation.y);
             ctx.lineTo(e.clientX, e.clientY);
+            console.log(e.clientX, e.clientY)
             sendDraw(e.clientX, e.clientY, prevLocation.x, prevLocation.y, isPressing, prevLocation);
             ctx.stroke();
             setPrevLocation({x: e.clientX, y: e.clientY});
         }
-    }
+    };
 
     return (
         <div>
@@ -123,8 +144,8 @@ function Canvas(props) {
                 <canvas
                     style={{
                         marginTop: 10,
-                        width: window.innerWidth / 2,
-                        height: window.innerHeight / 2,
+                        width: 700,
+                        height: 500,
                         position: "relative",
                         border: '1px solid lightgrey',
                         borderRadius: 5,
@@ -139,22 +160,28 @@ function Canvas(props) {
                 />
             </div>
             <Controls>
-                <Button style={{width: 80, height: 50, marginTop: 5, marginRight: 5}} onClick={() => {
+                <Button style={{width: 80, height: 50, marginTop: 5, marginRight: 5}} disabled={isTurn} onClick={() => {
                     const canvas = canvasRef.current;
                     const ctx = canvas.getContext("2d");
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    let clearBroadcast = {
+                        type: "CLEAR",
+                        name: apiVar.user.name,
+                        room: localStorage.getItem('roomName'),
+                        date: new Date(Date.now()).toLocaleDateString('fr')
+                    };
+                    socket.send(JSON.stringify(clearBroadcast));
                 }}>Nettoyer</Button>
                 {COLORS.map(c => (
-                    <ColorButton key={c} onClick={() => setColor(c)} color={c}>
+                    <ColorButton disabled={isTurn} key={c} onClick={() => setColor(c)} color={c}>
                         {c}
                     </ColorButton>
                 ))}
-                <input style={{width: 40, height: 40, marginTop: 12}} id="number" type="number" value={brush} onChange={(event) => {
-                        setBrush(event.target.value)
-                }} />
-
+                <input style={{width: 40, height: 40, marginTop: 12}} id="number" type="number" value={brush}
+                       onChange={(event) => {
+                           setBrush(event.target.value)
+                       }}/>
             </Controls>
-
         </div>
     );
 }

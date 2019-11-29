@@ -15,6 +15,7 @@ let user = JSON.parse(localStorage.getItem("user"))
         logout: path + "/logout",
         addScore: path + "/score",
         createRoom: path + "/create-game",
+        rooms: path + "/rooms",
 }
 
 export default apiVar;

@@ -12,6 +12,8 @@ const Room = (props) => {
     const [username, uChange] = useState(apiVar.user);
     const [reponse, setReponse] = useState('');
     const [Broadcast, setBroadcast] = useState([]);
+    const [pressing, setIsPressing] = useState([]);
+    const [clear, setClear] = useState(false);
     const [socketData, setSocketData] = useState({
         reponses: [],
         position: []
@@ -32,7 +34,8 @@ const Room = (props) => {
         };
         socket.onclose = event => {
             console.log("Socket Closed Connection: ", event);
-            socket.send("Client Closed!")
+            socket.send(apiVar.user.name + "Just leave room")
+            console.log(apiVar.user.name + "Just leave room")
         };
         socket.onerror = error => {
             console.log("Socket Error: ", error);
@@ -50,13 +53,23 @@ const Room = (props) => {
                     {reponses: [...socketData.reponses, parsedData]}))
 
             }
+            if (parsedData.type === 'CLEAR') {
+                setClear(true)
+                setClear(false)
+            }
+            if (parsedData.type === 'PRESSING') {
+                if(parsedData.value){
+                    setIsPressing(parsedData.value)
+                } else {
+                    setIsPressing(parsedData.value)
+                }
+            }
         };
     });
 
 
     const getMessage = async (reponseInput) => {
         await setReponse(reponseInput)
-
     };
 
     const sendMessage = () => {
@@ -103,28 +116,25 @@ const Room = (props) => {
                         <div className={classes.received}>
                             <ul>
                                 {socketData.reponses.map((item, index) => (
-                                        <li style={{listStyle: 'none'}} key={index}>
-                                            {item.reponse === "Viens de rejoindre le chat" ?
-                                                <span style={{
-                                                    fontWeight: 600,
-                                                    color: 'red'
-                                                }}>{item.name}{' viens de rejoindre le salon'}{'\n'}</span>
-                                                : <span style={{
-                                                    fontWeight: 400,
-                                                    color: 'black'
-                                                }}><strong>{item.date}</strong>, <strong>{item.name}</strong> :{item.reponse}{'\n'}</span>}
-                                            <hr/>
-                                        </li>
-
-                                    )
+                                    <li style={{listStyle: 'none'}} key={index}>
+                                        {item.reponse === "Viens de rejoindre le chat" ?
+                                            <span style={{
+                                                fontWeight: 600,
+                                                color: 'red'
+                                            }}>{item.name}{' viens de rejoindre le salon'}{'\n'}</span>
+                                            : <span style={{
+                                                fontWeight: 400,
+                                                color: 'black'
+                                            }}><strong>{item.date}</strong>, <strong>{item.name}</strong> :{item.reponse}{'\n'}</span>}
+                                        <hr/>
+                                    </li>)
                                 )}
                             </ul>
                         </div>
                         <div className={classes.sending}>
-                            <input onChange={e => getMessage(e.target.value) } onKeyUp={(event) => {
+                            <input onChange={e => getMessage(e.target.value)} onKeyUp={(event) => {
                                 if (event.keyCode === 13) {
                                     sendMessage();
-
                                 }
                             }}
                                    style={{boxShadow: "0 13px 27px -5px rgba(50, 50, 93, 0.25),    0 8px 16px -8px rgba(0, 0, 0, 0.3)"}}
@@ -137,14 +147,14 @@ const Room = (props) => {
                     </div>
 
                     <div className={classes.canvas} id={'draw'}>
-                        {/*<Drawing/>*/}
-                        <Canvas isTurn={apiVar.user.name === "Brian"}
+                        <Canvas isTurn={apiVar.user.name !== "Brian"}
                                 X={Broadcast.coords}
                                 Y={Broadcast.clientY}
                                 color={Broadcast.color}
                                 brush={Broadcast.bursh}
-                                isPressing={Broadcast.isPressing}
+                                isPressing={pressing}
                                 prevLocation={Broadcast.prevLocation}
+                                clear={clear}
                         />
                     </div>
                 </div>

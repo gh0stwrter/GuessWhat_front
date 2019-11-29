@@ -87,6 +87,7 @@ export default function SignInSide(props) {
         await axios.get(apiVar.users).then(res => {
             console.log(res)
             let users = res.data;
+            console.log(users)
             if (users) {
                 const check = users.find(user => user.Name === username)
                 if (check) {

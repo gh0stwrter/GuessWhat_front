@@ -13,8 +13,10 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import {CreateRoomGame} from '../../_utils/api/queries';
 import apiVar from '../../_utils/api/apiVar';
-import {message} from "../../_utils/socket/socketManager";
+import axios from "axios";
 import {Redirect} from "react-router-dom";
+import {store} from "react-notifications-component";
+
 
 export default function Album(props) {
     const classes = useStyles();
@@ -50,14 +52,33 @@ export default function Album(props) {
     const sendNewRoom = async (name) => {
         let user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-            await CreateRoomGame(apiVar.createRoom, {
-                AdminID: apiVar.user.id,
-                Name: name,
-            }).then(res => {
-                console.log(res)
-                goToRoom(name)
-            }).catch(error => {
-                throw new Error(error)
+            await axios.get(apiVar.rooms).then(res => {
+                let room = res.data.find(room => room.Name === name)
+                console.log(room)
+                if (room) {
+                    store.addNotification({
+                        title: "Nom du salon deja pris!",
+                        message: "Veuillez changer le nom",
+                        type: "warning",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    })
+                } else {
+                    CreateRoomGame(apiVar.createRoom, {
+                        Admin: apiVar.user.name,
+                        Name: name,
+                    }).then(res => {
+                        goToRoom(name)
+                    }).catch(error => {
+                        throw new Error(error)
+                    })
+                }
             })
         } else {
             props.history.push('/connexion')
