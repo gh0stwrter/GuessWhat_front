@@ -48,6 +48,7 @@ const Room = (props) => {
             if (parsedData.type === 'MESSAGE') {
                 setSocketData(() => (
                     {reponses: [...socketData.reponses, parsedData]}))
+
             }
         };
     });

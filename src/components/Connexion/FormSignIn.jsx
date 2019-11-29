@@ -14,10 +14,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import apiVar from "../../_utils/api/apiVar";
 import {SignAuth, SignUp} from "../../_utils/api/queries"
 import {Redirect} from 'react-router-dom';
-import { store } from 'react-notifications-component';
+import {store} from 'react-notifications-component';
 import axios from "axios";
-
-
 
 
 function Copyright() {
@@ -89,30 +87,37 @@ export default function SignInSide(props) {
         await axios.get(apiVar.users).then(res => {
             console.log(res)
             let users = res.data;
-            let check = users.find(user => user.Name === username)
-            if(check){
-                store.addNotification({
-                    title: "Nom deja pris",
-                    message: 'Cet Identifiants est deja enregistré',
-                    type: "warning",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true
-                    }
-                })
+            if (users) {
+                const check = users.find(user => user.Name === username)
+                if (check) {
+                    store.addNotification({
+                        title: "Nom deja pris",
+                        message: 'Cet Identifiants est deja enregistré',
+                        type: "warning",
+                        insert: "top",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 5000,
+                            onScreen: true
+                        }
+                    })
+                } else {
+                    SignUp(apiVar.signUp, {
+                        Name: username,
+                        Password: password
+                    })
+                }
             } else {
-                SignUp(apiVar.signUp,{
+                SignUp(apiVar.signUp, {
                     Name: username,
                     Password: password
                 })
             }
         })
+    };
 
-    }
 
     return (
         <Grid container component="main" className={classes.root}>
