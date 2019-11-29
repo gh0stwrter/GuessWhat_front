@@ -66,9 +66,8 @@ export default function Album(props) {
 
     const goToRoom = (id) => {
         if (apiVar.user) {
-            console.log(id)
             localStorage.setItem('roomName', id)
-            props.history.push('/salon/' + id)
+            props.history.push('/salon/' + id + '/' + apiVar.user.name)
         } else {
             props.history.push('/connexion')
         }

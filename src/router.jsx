@@ -22,7 +22,7 @@ const Routes = (props) => {
                 {/* PAGES */}
                 <Switch>
                     <Route exec path='/classement' component={Ranking}/>
-                    <PrivateRoute path='/salon/:id' component={Room}/>
+                    <PrivateRoute path='/salon/:id/:admin' component={Room}/>
                     <Route exact path='/' component={Home}/>
                     {/* COMPONENTS */}
                     <Route exac path='/connexion' component={SignIn}/>
