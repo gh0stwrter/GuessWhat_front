@@ -1,5 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
-import AppBar from '@material-ui/core/AppBar';
+import React, {useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -17,7 +16,6 @@ import axios from "axios";
 import {Redirect} from "react-router-dom";
 import {store} from "react-notifications-component";
 
-
 export default function Album(props) {
     const classes = useStyles();
     const [name, setRoomName] = useState("")
@@ -30,19 +28,12 @@ export default function Album(props) {
     const [first, setFirst] = useState(true)
 
     useEffect(() => {
-        /*isLogged()*/
-        if (first === true) {
-            getRooms();
-            setFirst(false)
-        }
+        getRooms();
     }, [first])
 
     const getRooms = async () => {
         await axios.get(apiVar.rooms).then(res => {
             setAllRooms([...allRooms, res.data])
-/*            res.data.map(room => {
-                allRooms.push(room)
-            });*/
         })
     };
 
@@ -187,7 +178,6 @@ export default function Album(props) {
                     {allRooms ?
                         allRooms.map(card => (
                             <Grid item key={card} xs={12} sm={6} md={4}>
-
                                 <Card className={classes.card}>
                                     <CardMedia
                                         className={classes.cardMedia}
@@ -197,7 +187,7 @@ export default function Album(props) {
                                     <CardContent className={classes.cardContent}>
                                         <Typography gutterBottom variant="h5" component="h2">
                                             {card.Name} {card.Admin}
-                                         </Typography>
+                                        </Typography>
                                         <Typography>
                                             This is a media card. You can use this section to describe the content.
                                         </Typography>

@@ -4,10 +4,8 @@ import apiVar from "./apiVar";
 import {store} from "react-notifications-component";
 
 export const SignAuth = async (req, params) => {
-    console.log(params)
     const data = await axios.post(req, params)
         .then((res) => {
-            console.log(res)
             let token = res.data.Token;
             if (token) {
                 let decoded = jwt.verify(token, 'my_secret_key');
